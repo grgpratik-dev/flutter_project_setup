@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_setup/src/app/theme/app_colors.dart';
+
+import 'app_colors.dart';
+import 'app_radius.dart';
+import 'app_spacing.dart';
+import 'app_typography.dart';
 
 /// Application-wide Material theme configuration.
 abstract final class AppTheme {
@@ -7,17 +11,28 @@ abstract final class AppTheme {
   static final ThemeData dark = _create(Brightness.dark);
 
   static ThemeData _create(Brightness brightness) {
-    final colorScheme = ColorScheme.fromSeed(
+    final generatedScheme = ColorScheme.fromSeed(
       seedColor: AppColors.brandSeed,
       brightness: brightness,
     );
-    const controlRadius = BorderRadius.all(Radius.circular(12));
+    final isDark = brightness == Brightness.dark;
+    final colorScheme = generatedScheme.copyWith(
+      surface: isDark ? AppColors.darkSurface : AppColors.surface,
+      primary: AppColors.primary,
+      secondary: AppColors.secondary,
+      tertiary: AppColors.accent,
+      error: AppColors.error,
+    );
+    const buttonRadius = BorderRadius.all(Radius.circular(AppRadius.button));
 
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: colorScheme.surface,
+      scaffoldBackgroundColor: isDark
+          ? AppColors.darkBackground
+          : AppColors.background,
+      textTheme: AppTypography.textTheme,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       appBarTheme: AppBarTheme(
         elevation: 0,
@@ -30,50 +45,60 @@ abstract final class AppTheme {
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.md,
         ),
-        border: const OutlineInputBorder(borderRadius: controlRadius),
+        border: const OutlineInputBorder(borderRadius: buttonRadius),
         enabledBorder: OutlineInputBorder(
-          borderRadius: controlRadius,
+          borderRadius: buttonRadius,
           borderSide: BorderSide(color: colorScheme.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: controlRadius,
+          borderRadius: buttonRadius,
           borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: controlRadius,
+          borderRadius: buttonRadius,
           borderSide: BorderSide(color: colorScheme.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: controlRadius,
+          borderRadius: buttonRadius,
           borderSide: BorderSide(color: colorScheme.error, width: 2),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(48),
-          shape: const RoundedRectangleBorder(borderRadius: controlRadius),
+          shape: const RoundedRectangleBorder(borderRadius: buttonRadius),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(48),
-          shape: const RoundedRectangleBorder(borderRadius: controlRadius),
+          shape: const RoundedRectangleBorder(borderRadius: buttonRadius),
           side: BorderSide(color: colorScheme.outline),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          shape: const RoundedRectangleBorder(borderRadius: controlRadius),
+          shape: const RoundedRectangleBorder(borderRadius: buttonRadius),
+        ),
+      ),
+      cardTheme: const CardThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.card)),
+        ),
+      ),
+      dialogTheme: const DialogThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.dialog)),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: colorScheme.inverseSurface,
         contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
-        shape: const RoundedRectangleBorder(borderRadius: controlRadius),
+        shape: const RoundedRectangleBorder(borderRadius: buttonRadius),
       ),
       dividerTheme: DividerThemeData(
         color: colorScheme.outlineVariant,

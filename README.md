@@ -20,6 +20,7 @@ the layers it actually needs.
 - Secure storage and shared-preferences services
 - Camera and gallery image picking, including multiple selection and Android lost-data recovery
 - Light and dark themes
+- Centralized color, spacing, radius, and typography design tokens
 - Shared use-case, logging, validation, and utility foundations
 - Unit and BLoC tests
 
@@ -118,6 +119,10 @@ BlocProvider(
   child: const ProfilePhotoView(),
 );
 
+context.read<ImagePickerBloc>().add(
+  const ImageFromGalleryRequested(maxWidth: 1200, imageQuality: 85),
+);
+```
 
 Listen for `ImagePickerStatus.success`, `cancelled`, and `failure` to update the
 UI. The selected files are available through `state.images`, while
@@ -128,6 +133,34 @@ multiple images. Picked files are temporary; upload or copy files that must be
 kept. On Android, call `retrieveLostData()` during startup on a screen that
 opens the picker so a result can be recovered if the activity was destroyed.
 
+The iOS camera and photo-library usage descriptions are included in
+`ios/Runner/Info.plist`. Customize their wording for each app before release.
+
+## Design tokens
+
+Shared visual values live under `lib/src/app/theme/`. Use tokens instead of
+one-off numbers so a new application's visual language can be changed in one
+place:
+
+```dart
+Padding(
+  padding: const EdgeInsets.all(AppSpacing.md),
+  child: Card(
+    child: Text(
+      'Account',
+      style: Theme.of(context).textTheme.titleLarge,
+    ),
+  ),
+);
+
+BorderRadius.circular(AppRadius.button);
+Theme.of(context).colorScheme.primary;
+```
+
+Widgets should prefer `Theme.of(context).colorScheme` and `textTheme` so light
+and dark colors resolve correctly. `AppColors` and `AppTypography` define the
+source tokens used by `AppTheme`; `AppSpacing` and `AppRadius` can be used
+directly in layouts.
 
 ## Adding a feature
 
