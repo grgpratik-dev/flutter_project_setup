@@ -1,7 +1,10 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/bloc/image_picker/image_picker_bloc.dart';
+import '../../core/services/media/image_picker_service.dart';
 import '../../core/services/network/network_service.dart';
 import '../../core/services/session/session_service.dart';
 import '../../core/services/storage/secure_storage_service.dart';
@@ -28,6 +31,9 @@ void initGetIt() {
 // grouping dependencies based on service, datasource, repository, usecase, bloc.
 
 void serviceDependencies() {
+  sl.registerLazySingleton<ImagePickerService>(
+    () => ImagePickerService(ImagePicker()),
+  );
   sl.registerLazySingleton<SharedPreferencesService>(
     () => SharedPreferencesService(SharedPreferencesAsync()),
   );
@@ -63,5 +69,8 @@ void usecaseDependencies() {
 void blocDependencies() {
   // Register your bloc dependencies here
   sl.registerFactory<AppBloc>(() => AppBloc(sl<SessionService>()));
+  sl.registerFactory<ImagePickerBloc>(
+    () => ImagePickerBloc(sl<ImagePickerService>()),
+  );
   sl.registerFactory<OnboardingBloc>(() => OnboardingBloc());
 }
