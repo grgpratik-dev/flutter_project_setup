@@ -23,7 +23,7 @@ abstract final class AppTheme {
       tertiary: AppColors.accent,
       error: AppColors.error,
     );
-    const buttonRadius = BorderRadius.all(Radius.circular(AppRadius.button));
+    const buttonRadius = BorderRadius.all(Radius.circular(AppRadius.md));
 
     return ThemeData(
       useMaterial3: true,
@@ -45,8 +45,8 @@ abstract final class AppTheme {
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.md,
+          horizontal: AppSpacing.spaceMd,
+          vertical: AppSpacing.spaceMd,
         ),
         border: const OutlineInputBorder(borderRadius: buttonRadius),
         enabledBorder: OutlineInputBorder(
@@ -86,12 +86,12 @@ abstract final class AppTheme {
       ),
       cardTheme: const CardThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(AppRadius.card)),
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.xl)),
         ),
       ),
       dialogTheme: const DialogThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(AppRadius.dialog)),
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
